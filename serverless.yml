@@ -1,0 +1,44 @@
+org: godrm
+app: godrm-api
+service: godrm-api
+
+plugins:
+  - serverless-offline
+  - serverless-plugin-typescript 
+  - serverless-plugin-warmup
+
+custom:
+  # Enable warmup on all functions (only for production and staging)
+  warmup:      
+      - production
+      - staging
+
+provider:
+  # General settings
+  name: aws
+  stage: dev
+  region: ap-northeast-1
+
+  # Function settings
+  runtime: nodejs14.x
+  timeout: 10 # default: 6s
+
+functions:
+  food:
+    handler: apps/godrm-api/src/main.handler
+    events:
+      - http:
+          method: ANY
+          path: /food
+      - http:
+          method: ANY
+          path: '/food/{proxy+}'
+  favourite:
+    handler: apps/favourite/src/main.handler
+    events:
+      - http:
+          method: ANY
+          path: '/favourite'
+      - http:
+          method: ANY
+          path: '/favourite/{proxy+}'
