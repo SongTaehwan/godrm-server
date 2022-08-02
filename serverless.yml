@@ -1,27 +1,38 @@
+frameworkVersion: '3'
+configValidationMode: error
+
 org: godrm
-app: godrm-api
+app: godrm
 service: godrm-api
 
 plugins:
   - serverless-offline
   - serverless-plugin-typescript 
-  - serverless-plugin-warmup
-
-custom:
-  # Enable warmup on all functions (only for production and staging)
-  warmup:      
-      - production
-      - staging
+  - serverless-domain-manager
 
 provider:
   # General settings
   name: aws
-  stage: dev
+  stage: ${sls:stage}
   region: ap-northeast-1
+
+  deploymentMethod: direct
+  # API Gateway settings
+  apiName: ${self:service}-${sls:stage}
 
   # Function settings
   runtime: nodejs14.x
   timeout: 10 # default: 6s
+
+custom:
+  domain:
+    dev: godrm-dev.api-server.link
+    prod: godrm.api-server.link
+  customDomain:
+    domainName: ${self:custom.domain.${opt:stage, 'dev'}}
+    basePath: ''
+    stage: ${self:provider.stage}
+    createRoute53Record: true
 
 functions:
   food:
@@ -42,3 +53,4 @@ functions:
       - http:
           method: ANY
           path: '/favourite/{proxy+}'
+          
