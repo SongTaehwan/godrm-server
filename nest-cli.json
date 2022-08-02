@@ -1,21 +1,21 @@
 {
   "$schema": "https://json.schemastore.org/nest-cli",
   "collection": "@nestjs/schematics",
-  "sourceRoot": "apps/godrm-api/src",
+  "sourceRoot": "apps/food/src",
   "monorepo": true,
-  "root": "apps/godrm-api",
+  "root": "apps/food",
   "compilerOptions": {
     "webpack": true,
-    "tsConfigPath": "apps/godrm-api/tsconfig.app.json"
+    "tsConfigPath": "apps/food/tsconfig.app.json"
   },
   "projects": {
-    "godrm-api": {
+    "food": {
       "type": "application",
-      "root": "apps/godrm-api",
+      "root": "apps/food",
       "entryFile": "main",
-      "sourceRoot": "apps/godrm-api/src",
+      "sourceRoot": "apps/food/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/godrm-api/tsconfig.app.json"
+        "tsConfigPath": "apps/food/tsconfig.app.json"
       }
     },
     "favourite": {
@@ -25,6 +25,33 @@
       "sourceRoot": "apps/favourite/src",
       "compilerOptions": {
         "tsConfigPath": "apps/favourite/tsconfig.app.json"
+      }
+    },
+    "user": {
+      "type": "application",
+      "root": "apps/user",
+      "entryFile": "main",
+      "sourceRoot": "apps/user/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/user/tsconfig.app.json"
+      }
+    },
+    "category": {
+      "type": "application",
+      "root": "apps/category",
+      "entryFile": "main",
+      "sourceRoot": "apps/category/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/category/tsconfig.app.json"
+      }
+    },
+    "shopping-cart": {
+      "type": "application",
+      "root": "apps/shopping-cart",
+      "entryFile": "main",
+      "sourceRoot": "apps/shopping-cart/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/shopping-cart/tsconfig.app.json"
       }
     }
   }

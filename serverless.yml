@@ -35,8 +35,17 @@ custom:
     createRoute53Record: true
 
 functions:
+  user:
+    handler: apps/user/src/main.handler
+    events:
+      - http:
+          method: ANY
+          path: '/user'
+      - http:
+          method: ANY
+          path: '/user/{proxy+}'
   food:
-    handler: apps/godrm-api/src/main.handler
+    handler: apps/food/src/main.handler
     events:
       - http:
           method: ANY
@@ -44,6 +53,15 @@ functions:
       - http:
           method: ANY
           path: '/food/{proxy+}'
+  category:
+    handler: apps/category/src/main.handler
+    events:
+      - http:
+          method: ANY
+          path: '/category'
+      - http:
+          method: ANY
+          path: '/category/{proxy+}'
   favourite:
     handler: apps/favourite/src/main.handler
     events:
@@ -53,4 +71,12 @@ functions:
       - http:
           method: ANY
           path: '/favourite/{proxy+}'
-          
+  shopping-cart:
+    handler: apps/shopping-cart/src/main.handler
+    events:
+      - http:
+          method: ANY
+          path: '/cart'
+      - http:
+          method: ANY
+          path: '/cart/{proxy+}'
