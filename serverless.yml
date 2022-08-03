@@ -9,6 +9,7 @@ plugins:
   - serverless-offline
   - serverless-plugin-typescript 
   - serverless-domain-manager
+  - serverless-plugin-optimize
 
 provider:
   # General settings
@@ -36,6 +37,11 @@ custom:
     basePath: ''
     stage: ${self:provider.stage}
     createRoute53Record: true
+  optimize:
+    external: ["swagger-ui-dist"]
+
+package:
+  individually: true
 
 functions:
   user:
