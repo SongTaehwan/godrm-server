@@ -35,15 +35,6 @@ export const handler: Handler = async (
   context: Context,
   callback: Callback,
 ) => {
-  // console.log(`Before: ${event.path}`);
-
-  // event.path = `${event.path}/`;
-  // event.path = event.path.includes('swagger-ui')
-  //   ? `swagger${event.path}`
-  //   : event.path;
-
-  // console.log(`After: ${event.path}`);
-
   server = server ?? (await bootstrap());
   return server(event, context, callback);
 };
