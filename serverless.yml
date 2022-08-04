@@ -6,8 +6,8 @@ app: godrm
 service: godrm-api
 
 plugins:
-  - serverless-offline
   - serverless-plugin-typescript 
+  - serverless-offline
   - serverless-domain-manager
   - serverless-plugin-optimize
 
@@ -49,10 +49,10 @@ functions:
     events:
       - http:
           method: ANY
-          path: '/user'
+          path: /user
       - http:
           method: ANY
-          path: '/user/{proxy+}'
+          path: /user/{proxy+}
   food:
     handler: apps/food/src/main.handler
     events:
@@ -61,31 +61,31 @@ functions:
           path: /food
       - http:
           method: ANY
-          path: '/food/{proxy+}'
+          path: /food/{proxy+}
   category:
     handler: apps/category/src/main.handler
     events:
       - http:
           method: ANY
-          path: '/category'
+          path: /category # base: / route: category
       - http:
           method: ANY
-          path: '/category/{proxy+}'
+          path: /category/{proxy+} # base: /category route: {proxy+}
   favourite:
     handler: apps/favourite/src/main.handler
     events:
       - http:
           method: ANY
-          path: '/favourite'
+          path: /favourite
       - http:
           method: ANY
-          path: '/favourite/{proxy+}'
+          path: /favourite/{proxy+}
   shopping-cart:
     handler: apps/shopping-cart/src/main.handler
     events:
       - http:
           method: ANY
-          path: '/cart'
+          path: /cart
       - http:
           method: ANY
-          path: '/cart/{proxy+}'
+          path: /cart/{proxy+}
