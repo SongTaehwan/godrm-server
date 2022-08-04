@@ -4,14 +4,15 @@ import { Callback, Context, Handler } from 'aws-lambda';
 import { INestApplication } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 
-import { CategoryModule } from './category.module';
+import { AppModule } from './app.module';
 
 let server: Handler;
 
 async function bootstrap(): Promise<Handler> {
-  const app = await NestFactory.create(CategoryModule);
+  const app = await NestFactory.create(AppModule);
   setupSwagger(app);
   await app.init();
+  // await app.listen(3000);
 
   const expressApp = app.getHttpAdapter().getInstance();
   return serverlessExpress({ app: expressApp });
@@ -29,6 +30,8 @@ function setupSwagger(app: INestApplication) {
 
   SwaggerModule.setup('api', app, document);
 }
+
+// bootstrap();
 
 export const handler: Handler = async (
   event: any,
