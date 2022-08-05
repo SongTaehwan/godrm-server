@@ -6,14 +6,17 @@ import {
   Delete,
   Controller,
   HttpStatus,
+  Patch,
 } from '@nestjs/common';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { MongoIdValidationPipe } from '../../common/pipes/mongo-id-validation.pipe';
-import { CreateUserDto } from './dto/create-user.dto';
+import { CreateCategoryDto } from './dto/create-category.dto';
 import { CategoryService } from './category.service';
+import { UpdateCategoryDto } from './dto/update-category.dto';
 
 const CATEGORY = 'category';
+const ID = 'id';
 
 @ApiTags('Category')
 @Controller()
@@ -27,7 +30,7 @@ export class CategoryController {
     때문에 아래의 @Get 은 /category 를 추가해야한다.
     -> /"category"
   */
-  @ApiResponse({ status: HttpStatus.OK, description: '식재료 정보 불러오기' })
+  @ApiResponse({ status: HttpStatus.OK, description: '식품군 리스트 불러오기' })
   @Get(CATEGORY)
   getAll() {
     return this.categoryService.getAll();
@@ -40,20 +43,37 @@ export class CategoryController {
     때문에 아래의 @Get 은 /category 를 이미 포함하고 있다.
     -> /category/":id"
   */
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: '특정 식품군 데이터 불러오기',
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: '해당하는 정보가 존재하지 않음',
+  })
   @Get(':id')
-  get(@Param('id', MongoIdValidationPipe) id: string): string {
+  get(@Param(ID, MongoIdValidationPipe) id: string) {
     return this.categoryService.get(id);
   }
 
-  @ApiResponse({ status: HttpStatus.OK, description: '식재료 정보 생성하기' })
+  @ApiResponse({ status: HttpStatus.OK, description: '식품군 추가' })
   @Post(CATEGORY)
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.categoryService.create();
+  create(@Body() createCategoryDto: CreateCategoryDto) {
+    return this.categoryService.create(createCategoryDto);
   }
 
-  @ApiResponse({ status: HttpStatus.OK, description: '식재료 정보 삭제하기' })
+  @ApiResponse({ status: HttpStatus.OK, description: '식품군 정보 변경' })
+  @Patch(':id')
+  update(
+    @Param(ID, MongoIdValidationPipe) id: string,
+    @Body() updateCategoryDto: UpdateCategoryDto,
+  ) {
+    return this.categoryService.update(id, updateCategoryDto);
+  }
+
+  @ApiResponse({ status: HttpStatus.OK, description: '식품군 삭제' })
   @Delete(CATEGORY)
-  delete() {
-    return this.categoryService.delete();
+  delete(@Body(ID, MongoIdValidationPipe) id: string) {
+    return this.categoryService.delete(id);
   }
 }

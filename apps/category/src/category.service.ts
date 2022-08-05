@@ -1,20 +1,82 @@
-import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import {
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
+
+import { Category, CategoryModel } from './schema/category.schema';
+import { CreateCategoryDto } from './dto/create-category.dto';
+import { Query } from 'mongoose';
+import { UpdateCategoryDto } from './dto/update-category.dto';
 
 @Injectable()
 export class CategoryService {
-  get(id: string): string {
-    return `Mongo ID: ${id}`;
+  constructor(
+    @InjectModel(Category.name) private categoryModel: CategoryModel,
+  ) {}
+
+  private mapQuery<T, D extends Object>(query: Query<T[], T>, filterDto: D) {
+    Object.entries(filterDto).forEach(([key, value]) =>
+      query.where(key).equals(value),
+    );
+
+    return query;
   }
 
-  getAll() {
-    return 'Fetch all';
+  async get(id: string): Promise<Category> {
+    const query = this.categoryModel.findById(id);
+    const category = await query.exec();
+
+    if (!category) {
+      throw new NotFoundException();
+    }
+
+    return category;
   }
 
-  create() {
-    return 'Created!';
+  async getAll(): Promise<Category[]> {
+    const query = this.categoryModel.find();
+    const categories = await query.exec();
+
+    if (categories === null) {
+      throw new BadRequestException();
+    }
+
+    return categories;
   }
 
-  delete() {
-    return 'Deleted';
+  async create(createCategoryDto: CreateCategoryDto): Promise<Category> {
+    const category = new this.categoryModel(createCategoryDto);
+    return category.save();
+  }
+
+  async update(
+    id: string,
+    updateCategoryDto: UpdateCategoryDto,
+  ): Promise<Category> {
+    const query = this.categoryModel.findByIdAndUpdate(id, updateCategoryDto, {
+      new: true,
+    });
+
+    const update = await query.exec();
+
+    if (!update) {
+      throw new NotFoundException();
+    }
+
+    return update;
+  }
+
+  async delete(id: string) {
+    const result = await this.categoryModel.findByIdAndDelete(id);
+
+    if (!result) {
+      throw new NotFoundException();
+    }
+
+    return {
+      id: result._id,
+    };
   }
 }
