@@ -1,17 +1,22 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { Document, Model } from 'mongoose';
 
-import { CATEGORY, TIMESTAMP } from '../constants';
+import { TIMESTAMP } from '../constants';
 
 export type CategoryDocument = Category & Document;
+export type CategoryModel = Model<CategoryDocument>;
 
 @Schema({
   autoIndex: true,
   autoCreate: true,
-  collection: CATEGORY,
   timestamps: TIMESTAMP,
-  id: true,
-  _id: true,
+  toJSON: {
+    virtuals: true,
+    transform: (doc, ret, options) => {
+      delete ret.__v;
+      delete ret._id;
+    },
+  },
 })
 export class Category {
   @Prop({
