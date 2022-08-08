@@ -3,17 +3,17 @@ import {
   Post,
   Body,
   Param,
+  Patch,
   Delete,
   Controller,
   HttpStatus,
-  Patch,
 } from '@nestjs/common';
-import { ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 
-import { MongoIdValidationPipe } from '../../common/pipes/mongo-id-validation.pipe';
+import { MongoIdValidationPipe } from '../../../libs/common/pipes';
 import { CreateCategoryDto } from './dto/create-category.dto';
-import { CategoryService } from './category.service';
 import { UpdateCategoryDto } from './dto/update-category.dto';
+import { CategoryService } from './category.service';
 
 const CATEGORY = 'category';
 const ID = 'id';

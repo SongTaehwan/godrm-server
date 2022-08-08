@@ -1,22 +1,11 @@
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import serverlessExpress from '@vendia/serverless-express';
-import { Callback, Context, Handler } from 'aws-lambda';
 import { INestApplication } from '@nestjs/common';
-import { NestFactory } from '@nestjs/core';
 
+import {
+  bootstrapApp,
+  createServerlessApp,
+} from '../../../libs/common/core/bootstrap';
 import { AppModule } from './app.module';
-
-let server: Handler;
-
-async function bootstrap(): Promise<Handler> {
-  const app = await NestFactory.create(AppModule);
-  setupSwagger(app);
-  await app.init();
-  // await app.listen(3000);
-
-  const expressApp = app.getHttpAdapter().getInstance();
-  return serverlessExpress({ app: expressApp });
-}
 
 function setupSwagger(app: INestApplication) {
   const config = new DocumentBuilder()
@@ -27,17 +16,15 @@ function setupSwagger(app: INestApplication) {
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
-
-  SwaggerModule.setup('api', app, document);
+  SwaggerModule.setup('docs', app, document);
 }
 
-// bootstrap();
+export const handler = createServerlessApp(AppModule, (app) => {
+  setupSwagger(app);
+});
 
-export const handler: Handler = async (
-  event: any,
-  context: Context,
-  callback: Callback,
-) => {
-  server = server ?? (await bootstrap());
-  return server(event, context, callback);
-};
+if (process.env.NODE_ENV === undefined) {
+  bootstrapApp(AppModule, (app) => {
+    setupSwagger(app);
+  });
+}

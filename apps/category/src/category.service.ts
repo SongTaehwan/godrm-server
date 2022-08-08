@@ -4,10 +4,10 @@ import {
   NotFoundException,
   BadRequestException,
 } from '@nestjs/common';
+import { Query } from 'mongoose';
 
 import { Category, CategoryModel } from './schema/category.schema';
 import { CreateCategoryDto } from './dto/create-category.dto';
-import { Query } from 'mongoose';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 
 @Injectable()
