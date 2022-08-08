@@ -23,7 +23,9 @@ export const handler = createServerlessApp(AppModule, (app) => {
   setupSwagger(app);
 });
 
-if (process.env.NODE_ENV === undefined) {
+const LOCAL = 'local'
+
+if (process.env.NODE_ENV === LOCAL) {
   bootstrapApp(AppModule, (app) => {
     setupSwagger(app);
   });
