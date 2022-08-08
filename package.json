@@ -10,6 +10,7 @@
     "build": "nest build",
     "format": "prettier --write \"apps/**/*.ts\" \"libs/**/*.ts\"",
     "start": "sls offline --stage dev --verbose --debug *",
+    "start:dev": "set ENV=local && nest start --watch",
     "start:prod": "sls offline --stage prod --verbose",
     "deploy": "sls deploy --stage dev --verbose",
     "deploy:prod": "sls deploy --stage prod --verbose",
@@ -82,7 +83,11 @@
     "coverageDirectory": "./coverage",
     "testEnvironment": "node",
     "roots": [
-      "<rootDir>/apps/"
-    ]
+      "<rootDir>/apps/",
+      "<rootDir>/libs/"
+    ],
+    "moduleNameMapper": {
+      "^@app/database-connection(|/.*)$": "<rootDir>/libs/database-connection/src/$1"
+    }
   }
 }

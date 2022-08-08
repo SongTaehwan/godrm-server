@@ -53,6 +53,15 @@
       "compilerOptions": {
         "tsConfigPath": "apps/shopping-cart/tsconfig.app.json"
       }
+    },
+    "database-connection": {
+      "type": "library",
+      "root": "libs/database-connection",
+      "entryFile": "index",
+      "sourceRoot": "libs/database-connection/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/database-connection/tsconfig.lib.json"
+      }
     }
   }
 }
