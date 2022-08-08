@@ -1,9 +1,5 @@
+import { Logger, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import {
-  Injectable,
-  NotFoundException,
-  BadRequestException,
-} from '@nestjs/common';
 import { Query } from 'mongoose';
 
 import { Category, CategoryModel } from './schema/category.schema';
@@ -12,6 +8,8 @@ import { UpdateCategoryDto } from './dto/update-category.dto';
 
 @Injectable()
 export class CategoryService {
+  private readonly logger = new Logger(CategoryService.name);
+
   constructor(
     @InjectModel(Category.name) private categoryModel: CategoryModel,
   ) {}
@@ -38,10 +36,6 @@ export class CategoryService {
   async getAll(): Promise<Category[]> {
     const query = this.categoryModel.find();
     const categories = await query.exec();
-
-    if (categories === null) {
-      throw new BadRequestException();
-    }
 
     return categories;
   }
