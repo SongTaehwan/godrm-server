@@ -1,23 +1,13 @@
+import { Document, Model, Schema as MongooseSchema } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, Model } from 'mongoose';
 
-import { TIMESTAMP } from '../constants';
+import { DEFAULT_SCHEMA_OPTIONS } from '../../../../libs/constants/schema';
+import { User } from '../../../user/src/schema/user.schema';
 
 export type CategoryDocument = Category & Document;
 export type CategoryModel = Model<CategoryDocument>;
 
-@Schema({
-  autoIndex: true,
-  autoCreate: true,
-  timestamps: TIMESTAMP,
-  toJSON: {
-    virtuals: true,
-    transform: (doc, ret, options) => {
-      delete ret.__v;
-      delete ret._id;
-    },
-  },
-})
+@Schema(DEFAULT_SCHEMA_OPTIONS)
 export class Category {
   @Prop({
     required: true,
@@ -29,9 +19,13 @@ export class Category {
   })
   icon_name: string;
 
-  @Prop({
-    default: null,
-  })
+  @Prop([
+    {
+      required: true,
+      type: MongooseSchema.Types.ObjectId,
+      ref: User.name,
+    },
+  ])
   user: string;
 }
 
