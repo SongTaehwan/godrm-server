@@ -27,6 +27,7 @@ provider:
 
   environment:
     DATABASE_URI: ${param:DATABASE_URI}
+    NODE_ENV: ${param:NODE_ENV}
 
 custom:
   domain:
