@@ -1,6 +1,12 @@
 import { ConfigModule } from '@nestjs/config';
-import { Module } from '@nestjs/common';
+import {
+  Module,
+  NestModule,
+  RequestMethod,
+  MiddlewareConsumer,
+} from '@nestjs/common';
 
+import { IncomingRequestLogMiddleware } from '../../../libs/common/middlewares/Incoming-request-log.middleware';
 import { DatabaseConnectionModule } from '../../../libs/database-connection/src';
 import { AppValidationProvider } from '../../../libs/common/providers';
 import { CategoryModule } from './category.module';
@@ -18,4 +24,10 @@ const ENV_LOCAL = '.env.local';
   ],
   providers: [AppValidationProvider],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(IncomingRequestLogMiddleware)
+      .forRoutes({ path: '*', method: RequestMethod.ALL });
+  }
+}
