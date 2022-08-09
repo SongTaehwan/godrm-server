@@ -10,6 +10,7 @@ export type UserModel = Model<UserDocument>;
 export class User {
   @Prop({
     required: true,
+    unique: true,
   })
   device_uuid: string;
 }
