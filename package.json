@@ -95,8 +95,7 @@
       "<rootDir>/libs/"
     ],
     "moduleNameMapper": {
-      "^@app/database-connection(|/.*)$": "<rootDir>/libs/database-connection/src/$1",
-      "^@app/auth(|/.*)$": "<rootDir>/libs/auth/src/$1"
+      "^@app/database-connection(|/.*)$": "<rootDir>/libs/database-connection/src/$1"
     }
   }
 }

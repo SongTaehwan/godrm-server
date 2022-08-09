@@ -9,7 +9,7 @@ import {
   IsNotEmpty,
 } from 'class-validator';
 
-import { Category } from 'apps/category/src/schema/category.schema';
+import { Category } from '../../../category/src/schema/category.schema';
 
 export enum StorageType {
   FROZEN = 'frozen',

@@ -45,6 +45,15 @@ package:
   individually: true
 
 functions:
+  auth:
+    handler: apps/auth/src/main.handler
+    events:
+      - http:
+          method: ANY
+          path: /auth
+      - http:
+          method: ANY
+          path: /auth/{proxy+}
   user:
     handler: apps/user/src/main.handler
     events:
