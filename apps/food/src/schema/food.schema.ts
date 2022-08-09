@@ -4,7 +4,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { DEFAULT_SCHEMA_OPTIONS } from '../../../../libs/constants/schema';
 import { Category } from 'apps/category/src/schema/category.schema';
 import { User } from '../../../user/src/schema/user.schema';
-import { StorageType } from '../dto/create-food.schema';
+import { StorageType } from '../dto/create-food.dto';
 
 export type FoodDocument = Food & Document;
 export type FoodModel = Model<FoodDocument>;
