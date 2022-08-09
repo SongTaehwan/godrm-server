@@ -3,7 +3,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
 import { DEFAULT_SCHEMA_OPTIONS } from '../../../../libs/constants/schema';
 import { User } from '../../../user/src/schema/user.schema';
-import { Food } from 'apps/food/src/schema/food.schema';
+import { Food } from '../../../food/src/schema/food.schema';
 
 export type ShoppingCartDocument = ShoppingCart & Document;
 export type ShoppingCartModel = Model<ShoppingCartDocument>;

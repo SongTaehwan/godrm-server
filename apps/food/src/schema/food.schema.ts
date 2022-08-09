@@ -2,7 +2,7 @@ import { Document, Model, Schema as MongooseSchema } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
 import { DEFAULT_SCHEMA_OPTIONS } from '../../../../libs/constants/schema';
-import { Category } from 'apps/category/src/schema/category.schema';
+import { Category } from '../../../category/src/schema/category.schema';
 import { User } from '../../../user/src/schema/user.schema';
 import { StorageType } from '../dto/create-food.dto';
 
@@ -31,6 +31,7 @@ export class Food {
   name: string;
 
   @Prop({
+    type: String,
     required: true,
     enum: StorageType,
     default: StorageType.CHILLED,

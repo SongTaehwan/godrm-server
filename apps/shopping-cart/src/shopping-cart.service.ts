@@ -2,7 +2,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Injectable, NotFoundException } from '@nestjs/common';
 
 import { ShoppingCart, ShoppingCartModel } from './schema/shopping-cart.schema';
-import { Food } from 'apps/food/src/schema/food.schema';
+import { Food } from '../../food/src/schema/food.schema';
 
 @Injectable()
 export class ShoppingCartService {
@@ -34,7 +34,6 @@ export class ShoppingCartService {
   }
 
   async deleteItem(id: string) {
-    // const item =
     // TODO: delete item from cart
   }
 }
