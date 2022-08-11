@@ -9,6 +9,7 @@ import {
 import { createLoggerFactory } from '../../../libs/common/middlewares/Incoming-request-log.middleware';
 import { DatabaseConnectionModule } from '../../../libs/database-connection/src';
 import { AppValidationProvider } from '../../../libs/common/providers';
+import { JwtAuthProvider } from '../../../libs/common/providers';
 import { CategoryModule } from './category.module';
 
 const ENV_LOCAL = '.env.local';
@@ -22,7 +23,7 @@ const ENV_LOCAL = '.env.local';
     DatabaseConnectionModule,
     CategoryModule,
   ],
-  providers: [AppValidationProvider],
+  providers: [AppValidationProvider, JwtAuthProvider],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
