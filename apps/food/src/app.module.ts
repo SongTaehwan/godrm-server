@@ -1,9 +1,12 @@
+import { ConfigModule } from '@nestjs/config';
 import { Module } from '@nestjs/common';
 
+import {
+  JwtAuthProvider,
+  AppValidationProvider,
+} from '../../../libs/common/providers';
 import { DatabaseConnectionModule } from '../../../libs/database-connection/src';
-import { AppValidationProvider } from '../../../libs/common/providers';
 import { FoodModule } from './food.module';
-import { ConfigModule } from '@nestjs/config';
 
 const ENV_LOCAL = '.env.local';
 
@@ -16,6 +19,6 @@ const ENV_LOCAL = '.env.local';
     DatabaseConnectionModule,
     FoodModule,
   ],
-  providers: [AppValidationProvider],
+  providers: [AppValidationProvider, JwtAuthProvider],
 })
 export class AppModule {}
