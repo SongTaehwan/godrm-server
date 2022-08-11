@@ -18,13 +18,6 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "esModuleInterop": true,
-    "paths": {
-      "@app/jwt-auth": [
-        "libs/jwt-auth/src"
-      ],
-      "@app/jwt-auth/*": [
-        "libs/jwt-auth/src/*"
-      ]
-    }
+    "paths": {}
   }
 }

@@ -23,6 +23,7 @@ export class AuthController {
     return this.authService.createToken(id);
   }
 
+  @Public()
   @Post(`${AUTH}/refresh`)
   refreshToken() {
     return this.authService.refreshToken();
