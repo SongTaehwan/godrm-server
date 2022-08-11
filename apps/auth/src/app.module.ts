@@ -6,7 +6,8 @@ import {
   MiddlewareConsumer,
 } from '@nestjs/common';
 
-import { IncomingRequestLogMiddleware } from '../../../libs/common/middlewares/Incoming-request-log.middleware';
+import { createLoggerFactory } from '../../../libs/common/middlewares/Incoming-request-log.middleware';
+import { JwtAuthProvider } from '../../../libs/common/providers/jwt-auth.provider';
 import { DatabaseConnectionModule } from '../../../libs/database-connection/src';
 import { AppValidationProvider } from '../../../libs/common/providers';
 import { AuthModule } from './auth.module';
@@ -22,12 +23,12 @@ const ENV_LOCAL = '.env.local';
     DatabaseConnectionModule,
     AuthModule,
   ],
-  providers: [AppValidationProvider],
+  providers: [AppValidationProvider, JwtAuthProvider],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
-      .apply(IncomingRequestLogMiddleware)
+      .apply(createLoggerFactory(AuthModule.name))
       .forRoutes({ path: '*', method: RequestMethod.ALL });
   }
 }
