@@ -1,12 +1,10 @@
 import { ConfigModule } from '@nestjs/config';
 import { Module } from '@nestjs/common';
 
-import {
-  JwtAuthProvider,
-  AppValidationProvider,
-} from '../../../libs/common/providers';
 import { DatabaseConnectionModule } from '../../../libs/database-connection/src';
+import { AppValidationProvider } from '../../../libs/common/providers';
 import { ShoppingCartModule } from './shopping-cart.module';
+import { JwtAuthModule } from '../../../libs/jwt-auth/src';
 
 const ENV_LOCAL = '.env.local';
 
@@ -18,7 +16,8 @@ const ENV_LOCAL = '.env.local';
     }),
     DatabaseConnectionModule,
     ShoppingCartModule,
+    JwtAuthModule,
   ],
-  providers: [AppValidationProvider, JwtAuthProvider],
+  providers: [AppValidationProvider],
 })
 export class AppModule {}

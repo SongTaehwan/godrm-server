@@ -6,12 +6,9 @@ import {
   MiddlewareConsumer,
 } from '@nestjs/common';
 
-import {
-  JwtAuthProvider,
-  AppValidationProvider,
-} from '../../../libs/common/providers';
 import { createLoggerFactory } from '../../../libs/common/middlewares/Incoming-request-log.middleware';
 import { DatabaseConnectionModule } from '../../../libs/database-connection/src';
+import { AppValidationProvider } from '../../../libs/common/providers';
 import { AuthModule } from './auth.module';
 
 const ENV_LOCAL = '.env.local';
@@ -25,7 +22,7 @@ const ENV_LOCAL = '.env.local';
     DatabaseConnectionModule,
     AuthModule,
   ],
-  providers: [AppValidationProvider, JwtAuthProvider],
+  providers: [AppValidationProvider],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

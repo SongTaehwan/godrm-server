@@ -13,12 +13,14 @@ import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { MongoIdValidationPipe } from '../../../libs/common/pipes';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
+import { Private } from '../../../libs/common/decorators';
 import { CategoryService } from './category.service';
 
 const CATEGORY = 'category';
 const ID = 'id';
 
 @ApiTags('Category')
+@Private()
 @Controller()
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
@@ -33,6 +35,7 @@ export class CategoryController {
   @ApiResponse({ status: HttpStatus.OK, description: '식품군 리스트 불러오기' })
   @Get(CATEGORY)
   getAll() {
+    console.log('12312312');
     return this.categoryService.getAll();
   }
 
@@ -53,6 +56,7 @@ export class CategoryController {
   })
   @Get(':id')
   get(@Param(ID, MongoIdValidationPipe) id: string) {
+    console.log('12312312');
     return this.categoryService.get(id);
   }
 
