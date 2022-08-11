@@ -27,9 +27,20 @@ export class UserService {
     return user;
   }
 
-  async create(id: string): Promise<User> {
+  async getByDeviceId(id: string) {
+    const query = this.userModel.findOne({ device_uuid: id });
+    const user = await query.exec();
+
+    if (!user) {
+      throw new NotFoundException();
+    }
+
+    return user;
+  }
+
+  async create(id: string) {
     // TODO: Cart, Favourite, Notification Service import 해와서 DB 에 추가
-    const user = new this.userModel(id);
+    const user = new this.userModel({ device_uuid: id });
     const result = await user.save();
 
     return result;
