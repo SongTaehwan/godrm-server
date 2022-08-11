@@ -1,7 +1,6 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
-import { User, UserModel } from '../../user/src/schema/user.schema';
 import { UserService } from '../../user/src/user.service';
 
 @Injectable()
@@ -11,24 +10,29 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  // @ts-ignore
-  async login({ _id }: UserModel) {
+  private async generateToken(id: string) {
     const payload = {
-      sub: _id,
+      sub: id,
     };
+
+    const token = await this.jwtService.signAsync(payload);
 
     return {
-      access_token: this.jwtService.sign(payload),
+      access_token: token,
     };
   }
 
-  async validateUser(id: string): Promise<User> {
-    const user = await this.userService.getById(id);
-
-    if (!user) {
-      throw new UnauthorizedException();
+  async createToken(id: string) {
+    try {
+      const user = await this.userService.getByDeviceId(id);
+      return this.generateToken(user._id);
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        const user = await this.userService.create(id);
+        return this.generateToken(user._id);
+      }
     }
-
-    return user;
   }
+
+  async refreshToken() {}
 }

@@ -5,7 +5,6 @@ import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 
 import { User, UserSchema } from '../../user/src/schema/user.schema';
-import { LocalStrategy } from './strategy/local.strategy';
 import { UserModule } from '../../user/src/user.module';
 import { JwtStrategy } from './strategy/jwt.strategy';
 import { AuthController } from './auth.controller';
@@ -28,7 +27,7 @@ import { TOKEN_SECRET } from './constants';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, LocalStrategy, JwtStrategy],
+  providers: [AuthService, JwtStrategy],
   exports: [AuthService],
 })
 export class AuthModule {}
