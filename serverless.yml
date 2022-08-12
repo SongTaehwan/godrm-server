@@ -59,10 +59,10 @@ functions:
     events:
       - http:
           method: ANY
-          path: /user
+          path: /users
       - http:
           method: ANY
-          path: /user/{proxy+}
+          path: /users/{proxy+}
   food:
     handler: apps/food/src/main.handler
     events:
