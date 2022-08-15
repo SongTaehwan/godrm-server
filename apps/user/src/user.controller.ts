@@ -45,4 +45,10 @@ export class UserController {
   delete(@User('id', MongoIdValidationPipe) id: string) {
     return this.userService.delete(id);
   }
+
+  @ApiResponse({ status: HttpStatus.OK, description: '특정 유저 삭제' })
+  @Delete(':id')
+  deleteById(@Param('id', MongoIdValidationPipe) id: string) {
+    return this.userService.delete(id);
+  }
 }
