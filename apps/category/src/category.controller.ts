@@ -11,13 +11,14 @@ import {
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { MongoIdValidationPipe } from '../../../libs/common/pipes';
+import { Private, User } from '../../../libs/common/decorators';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
-import { Private } from '../../../libs/common/decorators';
 import { CategoryService } from './category.service';
 
 const CATEGORY = 'category';
 const ID = 'id';
+const ID_PARAMETER = ':id';
 
 @ApiTags('Category')
 @Private()
@@ -33,10 +34,9 @@ export class CategoryController {
     -> /"category"
   */
   @ApiResponse({ status: HttpStatus.OK, description: '식품군 리스트 불러오기' })
-  @Get(CATEGORY)
-  getAll() {
-    console.log('12312312');
-    return this.categoryService.getAll();
+  @Get(CATEGORY) // category/
+  getAll(@User(ID) id: string) {
+    return this.categoryService.getByUser(id);
   }
 
   /* 
@@ -54,20 +54,20 @@ export class CategoryController {
     status: HttpStatus.NOT_FOUND,
     description: '해당하는 정보가 존재하지 않음',
   })
-  @Get(':id')
+  @Get(ID_PARAMETER) // category/:id
   get(@Param(ID, MongoIdValidationPipe) id: string) {
-    console.log('12312312');
     return this.categoryService.get(id);
   }
 
   @ApiResponse({ status: HttpStatus.OK, description: '식품군 추가' })
-  @Post(CATEGORY)
-  create(@Body() createCategoryDto: CreateCategoryDto) {
+  @Post(CATEGORY) // category/
+  create(@User(ID) id: string, @Body() createCategoryDto: CreateCategoryDto) {
+    createCategoryDto.user = id;
     return this.categoryService.create(createCategoryDto);
   }
 
   @ApiResponse({ status: HttpStatus.OK, description: '식품군 정보 변경' })
-  @Patch(':id')
+  @Patch(ID_PARAMETER) // category/:id
   update(
     @Param(ID, MongoIdValidationPipe) id: string,
     @Body() updateCategoryDto: UpdateCategoryDto,
@@ -76,8 +76,14 @@ export class CategoryController {
   }
 
   @ApiResponse({ status: HttpStatus.OK, description: '식품군 삭제' })
-  @Delete(CATEGORY)
-  delete(@Body(ID, MongoIdValidationPipe) id: string) {
+  @Delete(CATEGORY) // category
+  deleteByUser(@User(ID) id: string) {
+    return this.categoryService.deleteByUser(id);
+  }
+
+  @ApiResponse({ status: HttpStatus.OK, description: '식품군 삭제' })
+  @Delete(ID_PARAMETER) // category/:id
+  delete(@Param(ID, MongoIdValidationPipe) id: string) {
     return this.categoryService.delete(id);
   }
 }

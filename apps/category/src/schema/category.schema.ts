@@ -19,14 +19,12 @@ export class Category {
   })
   icon_name: string;
 
-  @Prop([
-    {
-      required: true,
-      type: MongooseSchema.Types.ObjectId,
-      ref: User.name,
-    },
-  ])
-  user: string;
+  @Prop({
+    type: MongooseSchema.Types.ObjectId,
+    ref: User.name,
+    required: true,
+  })
+  user: User;
 }
 
 export const CategorySchema = SchemaFactory.createForClass(Category);
