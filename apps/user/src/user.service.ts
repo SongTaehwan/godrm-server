@@ -16,20 +16,32 @@ import {
   ShoppingCart,
   ShoppingCartModel,
 } from '../../shopping-cart/src/schema/shopping-cart.schema';
+
+import {
+  Category,
+  CategoryModel,
+} from 'apps/category/src/schema/category.schema';
+
 import { User, UserDocument, UserModel } from './schema/user.schema';
+import { Food, FoodModel } from '../../food/src/schema/food.schema';
 
 @Injectable()
 export class UserService {
   private readonly logger = new Logger(UserService.name);
 
   constructor(
-    @InjectConnection() private connection: Connection,
+    @InjectConnection()
+    private connection: Connection,
     @InjectModel(User.name)
     private userModel: UserModel,
     @InjectModel(ShoppingCart.name)
     private shoppingCartModel: ShoppingCartModel,
     @InjectModel(Favourite.name)
     private favouriteModel: FavouriteModel,
+    @InjectModel(Food.name)
+    private foodModel: FoodModel,
+    @InjectModel(Category.name)
+    private categoryModel: CategoryModel,
   ) {}
 
   async getAll(): Promise<User[]> {
@@ -99,10 +111,15 @@ export class UserService {
       user = await this.userModel.findByIdAndDelete(id);
       await this.favouriteModel.findOneAndDelete({ user: user._id });
       await this.shoppingCartModel.findOneAndDelete({ user: user._id });
-      // TODO: Food, Category, Notification 도 삭제
+      await this.foodModel.deleteMany({ user: user._id });
+      await this.categoryModel.deleteMany({ user: user._id });
     });
 
     await session.endSession();
+
+    if (!user) {
+      throw new NotFoundException();
+    }
 
     return {
       id: user._id,
