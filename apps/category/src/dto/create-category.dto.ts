@@ -9,4 +9,8 @@ export class CreateCategoryDto {
   @IsNotEmpty()
   @IsOptional()
   icon_name?: string;
+
+  @IsString()
+  @IsOptional()
+  user?: string;
 }
