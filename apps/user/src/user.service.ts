@@ -1,16 +1,21 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
+import {
+  Logger,
+  Injectable,
+  NotFoundException,
+  ConflictException,
+} from '@nestjs/common';
+import { InjectConnection, InjectModel } from '@nestjs/mongoose';
+import { Connection } from 'mongoose';
 
 import {
   Favourite,
   FavouriteModel,
-} from 'apps/favourite/src/schema/favourite.schema';
+} from '../../favourite/src/schema/favourite.schema';
 
 import {
   ShoppingCart,
   ShoppingCartModel,
-} from 'apps/shopping-cart/src/schema/shopping-cart.schema';
-
+} from '../../shopping-cart/src/schema/shopping-cart.schema';
 import { User, UserDocument, UserModel } from './schema/user.schema';
 
 @Injectable()
@@ -18,6 +23,7 @@ export class UserService {
   private readonly logger = new Logger(UserService.name);
 
   constructor(
+    @InjectConnection() private connection: Connection,
     @InjectModel(User.name)
     private userModel: UserModel,
     @InjectModel(ShoppingCart.name)
@@ -55,72 +61,51 @@ export class UserService {
     return user;
   }
 
+  private checkUserExist(deviceId: string) {
+    const query = this.userModel.exists({ device_uuid: deviceId });
+    return query.exec();
+  }
+
   async create(deviceId: string) {
-    let userId = '';
-
-    try {
-      const user = await this.createUser(deviceId);
-      userId = user.id;
-      await this.createCart(user.id);
-      await this.createFavourite(user.id);
-      return user;
-    } catch (error) {
-      if (userId) {
-        await this.delete(userId);
-      }
+    if (await this.checkUserExist(deviceId)) {
+      throw new ConflictException();
     }
-  }
 
-  private async createUser(id: string) {
-    const user = new this.userModel({ device_uuid: id });
-    const result = await user.save();
+    const session = await this.connection.startSession();
 
-    return result;
-  }
+    let result;
 
-  private async createCart(userId: string) {
-    const cart = new this.shoppingCartModel({ user: userId });
-    const result = await cart.save();
+    await session.withTransaction(async () => {
+      const user = new this.userModel({ device_uuid: deviceId });
+      const cart = new this.shoppingCartModel({ user: user._id });
+      const favourite = new this.favouriteModel({ user: user._id });
 
-    return result;
-  }
+      result = await user.save();
+      await cart.save();
+      await favourite.save();
+    });
 
-  private async createFavourite(userId: string) {
-    const favourite = new this.favouriteModel({ user: userId });
-    const result = await favourite.save();
+    await session.endSession();
 
     return result;
   }
 
   async delete(id: string) {
-    const result = await this.deleteUser(id);
-    await this.deleteCart(id);
-    await this.deleteFavourite(id);
+    const session = await this.connection.startSession();
 
-    return result;
-  }
+    let user;
 
-  private async deleteUser(id: string) {
-    const user = await this.userModel.findByIdAndDelete(id);
+    await session.withTransaction(async () => {
+      user = await this.userModel.findByIdAndDelete(id);
+      await this.favouriteModel.findOneAndDelete({ user: user._id });
+      await this.shoppingCartModel.findOneAndDelete({ user: user._id });
+      // TODO: Food, Category, Notification 도 삭제
+    });
+
+    await session.endSession();
 
     return {
       id: user._id,
-    };
-  }
-
-  private async deleteFavourite(id: string) {
-    const favourite = await this.favouriteModel.findOneAndDelete({ user: id });
-
-    return {
-      id: favourite._id,
-    };
-  }
-
-  private async deleteCart(id: string) {
-    const cart = await this.shoppingCartModel.findOneAndDelete({ user: id });
-
-    return {
-      id: cart._id,
     };
   }
 }
