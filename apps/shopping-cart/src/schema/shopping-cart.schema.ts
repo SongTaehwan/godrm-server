@@ -14,16 +14,19 @@ export class ShoppingCart {
     type: MongooseSchema.Types.ObjectId,
     ref: User.name,
     required: true,
+    unique: true,
   })
   user: User;
 
-  @Prop({
-    type: MongooseSchema.Types.ObjectId,
-    ref: Food.name,
-    required: true,
-    default: [],
-  })
-  food: Food[];
+  @Prop([
+    {
+      type: MongooseSchema.Types.ObjectId,
+      ref: Food.name,
+      required: true,
+      default: [],
+    },
+  ])
+  food: (Food | string)[];
 }
 
 export const ShoppingCartSchema = SchemaFactory.createForClass(ShoppingCart);

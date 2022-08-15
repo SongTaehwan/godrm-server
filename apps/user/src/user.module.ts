@@ -8,12 +8,18 @@ import { UserService } from './user.service';
 import {
   ShoppingCart,
   ShoppingCartSchema,
-} from '../../../apps/shopping-cart/src/schema/shopping-cart.schema';
+} from '../../shopping-cart/src/schema/shopping-cart.schema';
 
 import {
   Favourite,
   FavouriteSchema,
-} from '../../../apps/favourite/src/schema/favourite.schema';
+} from '../../favourite/src/schema/favourite.schema';
+import {
+  Category,
+  CategorySchema,
+} from '../../category/src/schema/category.schema';
+
+import { Food, FoodSchema } from '../../food/src/schema/food.schema';
 
 @Module({
   imports: [
@@ -21,6 +27,8 @@ import {
       { name: User.name, schema: UserSchema },
       { name: ShoppingCart.name, schema: ShoppingCartSchema },
       { name: Favourite.name, schema: FavouriteSchema },
+      { name: Food.name, schema: FoodSchema },
+      { name: Category.name, schema: CategorySchema },
     ]),
   ],
   controllers: [UserController],

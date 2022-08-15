@@ -20,7 +20,7 @@ import {
 import {
   Category,
   CategoryModel,
-} from 'apps/category/src/schema/category.schema';
+} from '../../category/src/schema/category.schema';
 
 import { User, UserDocument, UserModel } from './schema/user.schema';
 import { Food, FoodModel } from '../../food/src/schema/food.schema';
