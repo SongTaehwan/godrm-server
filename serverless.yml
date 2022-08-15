@@ -28,6 +28,7 @@ provider:
   environment:
     DATABASE_URI: ${param:DATABASE_URI}
     NODE_ENV: ${param:NODE_ENV}
+    TOKEN_SECRET: ${param:TOKEN_SECRET}
 
 custom:
   domain:
