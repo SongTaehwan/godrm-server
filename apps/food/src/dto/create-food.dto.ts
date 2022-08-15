@@ -48,4 +48,8 @@ export class CreateFoodDto {
   @IsDate()
   @IsOptional()
   purchased_at?: Date;
+
+  @IsMongoId()
+  @IsOptional()
+  user?: string;
 }

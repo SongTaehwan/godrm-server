@@ -15,6 +15,7 @@ export class Food {
     type: MongooseSchema.Types.ObjectId,
     ref: Category.name,
     required: true,
+    default: null,
   })
   category: Category;
 
@@ -23,7 +24,7 @@ export class Food {
     ref: User.name,
     required: true,
   })
-  user: string;
+  user: User | string;
 
   @Prop({
     required: true,
@@ -45,13 +46,12 @@ export class Food {
   expired: boolean;
 
   @Prop({
-    required: true,
     default: 1,
   })
   quantity: number;
 
   @Prop({
-    default: null,
+    default: 0,
   })
   price: number;
 
