@@ -31,7 +31,7 @@ import {
       useFactory: (configService: ConfigService) => ({
         secret: configService.get<string>(TOKEN_SECRET),
         signOptions: {
-          expiresIn: '1d',
+          expiresIn: '365d',
         },
       }),
       inject: [ConfigService],

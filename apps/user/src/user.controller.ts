@@ -15,6 +15,8 @@ import { Private, User } from '../../../libs/common/decorators';
 import { UserService } from './user.service';
 
 const USERS = 'users';
+const ID = 'id';
+const ID_PARAMETER = ':id';
 
 @ApiTags('User')
 @Private()
@@ -29,26 +31,29 @@ export class UserController {
   }
 
   @ApiResponse({ status: HttpStatus.OK, description: '유저 정보 불러오기' })
-  @Get(':id')
-  get(@Param('id', MongoIdValidationPipe) id: string) {
+  @Get(ID_PARAMETER)
+  get(@Param(ID, MongoIdValidationPipe) id: string) {
     return this.userService.getById(id);
   }
 
   @ApiResponse({ status: HttpStatus.OK, description: '유저 생성' })
   @Post(USERS)
-  create(@Body('id', ParseUUIDPipe) id: string) {
+  create(@Body(ID, ParseUUIDPipe) id: string) {
     return this.userService.create(id);
   }
 
   @ApiResponse({ status: HttpStatus.OK, description: '유저 삭제' })
   @Delete(USERS)
-  delete(@User('id', MongoIdValidationPipe) id: string) {
+  delete(
+    @User(ID)
+    id: string,
+  ) {
     return this.userService.delete(id);
   }
 
   @ApiResponse({ status: HttpStatus.OK, description: '특정 유저 삭제' })
-  @Delete(':id')
-  deleteById(@Param('id', MongoIdValidationPipe) id: string) {
+  @Delete(ID_PARAMETER)
+  deleteById(@Param(ID, MongoIdValidationPipe) id: string) {
     return this.userService.delete(id);
   }
 }
