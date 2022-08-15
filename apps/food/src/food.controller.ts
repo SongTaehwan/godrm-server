@@ -9,9 +9,9 @@ import {
   Controller,
 } from '@nestjs/common';
 import { ApiResponse } from '@nestjs/swagger';
-import { User } from 'libs/common/decorators';
 
 import { MongoIdValidationPipe } from '../../../libs/common/pipes';
+import { User } from '../../../libs/common/decorators';
 import { CreateFoodDto } from './dto/create-food.dto';
 import { UpdateFoodDto } from './dto/update-food.dto';
 import { FoodService } from './food.service';
