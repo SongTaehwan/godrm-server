@@ -3,7 +3,11 @@ import { ConfigService } from '@nestjs/config';
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 
-import { User, UserSchema } from '../../user/src/schema/user.schema';
+import { ShoppingCartModelProvider } from '../../shopping-cart/src/providers/shopping-cart-model.provider';
+import { FavouriteModelProvider } from '../../favourite/src/providers/favourite-model.provider';
+import { CategoryModelProvider } from '../../category/src/providers/category-model.provider';
+import { UserModelProvider } from '../../user/src/providers/user-model.provider';
+import { ItemModelProvider } from '../../food/src/providers/Item-model.provider';
 import { AppAuthProvider } from '../../../libs/common/providers';
 import { UserService } from '../../user/src/user.service';
 import { JwtStrategy } from './strategy/jwt.strategy';
@@ -11,29 +15,14 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { TOKEN_SECRET } from './constants';
 
-import {
-  ShoppingCart,
-  ShoppingCartSchema,
-} from '../../../apps/shopping-cart/src/schema/shopping-cart.schema';
-import {
-  Favourite,
-  FavouriteSchema,
-} from '../../../apps/favourite/src/schema/favourite.schema';
-import {
-  Category,
-  CategorySchema,
-} from '../../category/src/schema/category.schema';
-
-import { Food, FoodSchema } from '../../food/src/schema/food.schema';
-
 @Module({
   imports: [
     MongooseModule.forFeature([
-      { name: User.name, schema: UserSchema },
-      { name: ShoppingCart.name, schema: ShoppingCartSchema },
-      { name: Favourite.name, schema: FavouriteSchema },
-      { name: Food.name, schema: FoodSchema },
-      { name: Category.name, schema: CategorySchema },
+      UserModelProvider,
+      ShoppingCartModelProvider,
+      FavouriteModelProvider,
+      ItemModelProvider,
+      CategoryModelProvider,
     ]),
     JwtModule.registerAsync({
       useFactory: (configService: ConfigService) => ({
