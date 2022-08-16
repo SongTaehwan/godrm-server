@@ -32,7 +32,7 @@ export class GetShoppingCartById
     }
 
     const cart = await this.shoppingCartModel.findOne({
-      $or: [{ id: value }, { user: value }],
+      $or: [{ _id: value }, { user: value }],
     });
 
     if (!cart) {
