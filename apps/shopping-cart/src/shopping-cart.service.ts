@@ -36,6 +36,10 @@ export class ShoppingCartService {
   }
 
   async getItems(id: string) {
+    if (!(await this.shoppingCartModel.exists({ _id: id }))) {
+      throw new NotFoundException();
+    }
+
     const cart = await this.shoppingCartModel
       .findOne({ _id: id })
       .populate({
@@ -74,7 +78,11 @@ export class ShoppingCartService {
   }
 
   async addItem({ id, itemId }: AddShoppingCartItemDto) {
-    if (await this.shoppingCartModel.exists({ id })) {
+    if (
+      await this.shoppingCartModel.exists({
+        $and: [{ _id: id }, { items: { $in: [itemId] } }],
+      })
+    ) {
       throw new ConflictException();
     }
 
@@ -89,7 +97,11 @@ export class ShoppingCartService {
   }
 
   async removeItem({ id, itemId }: RemoveShoppingCartItemDto) {
-    if (await this.shoppingCartModel.exists({ id })) {
+    if (
+      await this.shoppingCartModel.exists({
+        $and: [{ _id: id }, { items: { $nin: [itemId] } }],
+      })
+    ) {
       throw new ConflictException();
     }
 
