@@ -64,15 +64,15 @@ functions:
       - http:
           method: ANY
           path: /users/{proxy+}
-  food:
-    handler: apps/food/src/main.handler
+  item:
+    handler: apps/item/src/main.handler
     events:
       - http:
           method: ANY
-          path: /food
+          path: /items
       - http:
           method: ANY
-          path: /food/{proxy+}
+          path: /items/{proxy+}
   category:
     handler: apps/category/src/main.handler
     events:

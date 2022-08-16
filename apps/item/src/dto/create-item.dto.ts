@@ -18,7 +18,7 @@ export enum StorageType {
   CHILLED = 'CHILLED',
 }
 
-export class CreateFoodDto {
+export class CreateItemDto {
   @IsMongoId()
   @IsNotEmpty()
   category: Category;

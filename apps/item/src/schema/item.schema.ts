@@ -4,13 +4,13 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { DEFAULT_SCHEMA_OPTIONS } from '../../../../libs/constants/schema';
 import { Category } from '../../../category/src/schema/category.schema';
 import { User } from '../../../user/src/schema/user.schema';
-import { StorageType } from '../dto/create-food.dto';
+import { StorageType } from '../dto/create-item.dto';
 
-export type FoodDocument = Food & Document;
-export type FoodModel = Model<FoodDocument>;
+export type ItemDocument = Item & Document;
+export type ItemModel = Model<ItemDocument>;
 
 @Schema(DEFAULT_SCHEMA_OPTIONS)
-export class Food {
+export class Item {
   @Prop({
     type: MongooseSchema.Types.ObjectId,
     ref: Category.name,
@@ -66,4 +66,4 @@ export class Food {
   purchased_at: Date;
 }
 
-export const FoodSchema = SchemaFactory.createForClass(Food);
+export const ItemSchema = SchemaFactory.createForClass(Item);

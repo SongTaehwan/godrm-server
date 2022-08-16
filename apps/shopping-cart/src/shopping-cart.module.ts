@@ -3,7 +3,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 
 import { CategoryModelProvider } from '../../category/src/providers/category-model.provider';
 import { ShoppingCartModelProvider } from './providers/shopping-cart-model.provider';
-import { ItemModelProvider } from '../../food/src/providers/Item-model.provider';
+import { ItemModelProvider } from '../../item/src/providers/Item-model.provider';
 import { createLoggerFactory } from '../../../libs/common/middlewares';
 import { ShoppingCartController } from './shopping-cart.controller';
 import { ShoppingCartService } from './shopping-cart.service';

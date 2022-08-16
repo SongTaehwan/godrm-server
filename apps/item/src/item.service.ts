@@ -1,6 +1,10 @@
 import { InjectConnection, InjectModel } from '@nestjs/mongoose';
-import { Injectable, NotFoundException } from '@nestjs/common';
 import { Connection } from 'mongoose';
+import {
+  Injectable,
+  ConflictException,
+  NotFoundException,
+} from '@nestjs/common';
 
 import {
   ShoppingCart,
@@ -11,46 +15,50 @@ import {
   FavouriteModel,
 } from '../../favourite/src/schema/favourite.schema';
 
-import { Food, FoodModel } from './schema/food.schema';
-import { CreateFoodDto } from './dto/create-food.dto';
-import { UpdateFoodDto } from './dto/update-food.dto';
+import { Item, ItemModel } from './schema/item.schema';
+import { CreateItemDto } from './dto/create-item.dto';
+import { UpdateItemDto } from './dto/update-item.dto';
 
 @Injectable()
-export class FoodService {
+export class ItemService {
   constructor(
     @InjectConnection()
     private connection: Connection,
-    @InjectModel(Food.name)
-    private foodModel: FoodModel,
+    @InjectModel(Item.name)
+    private itemModel: ItemModel,
     @InjectModel(ShoppingCart.name)
     private shoppingCartModel: ShoppingCartModel,
     @InjectModel(Favourite.name)
     private favouriteModel: FavouriteModel,
   ) {}
   async get(id: string) {
-    const query = this.foodModel.findById(id);
-    const category = await query.exec();
+    const query = this.itemModel.findById(id);
+    const item = await query.exec();
 
-    if (!category) {
+    if (!item) {
       throw new NotFoundException();
     }
 
-    return category;
+    return item;
   }
 
   async getByUser(id: string) {
-    const query = this.foodModel.find({ user: id });
-    const categories = await query.exec();
-    return categories;
+    const query = this.itemModel.find({ user: id });
+    const items = await query.exec();
+    return items;
   }
 
-  create(createCategoryDto: CreateFoodDto) {
-    const category = new this.foodModel(createCategoryDto);
-    return category.save();
+  async create(createItemDto: CreateItemDto) {
+    if (await this.itemModel.exists({ user: createItemDto.user })) {
+      throw new ConflictException();
+    }
+
+    const item = new this.itemModel(createItemDto);
+    return item.save();
   }
 
-  async update(id: string, updateCategoryDto: UpdateFoodDto) {
-    const query = this.foodModel.findByIdAndUpdate(id, updateCategoryDto, {
+  async update(id: string, updateItemDto: UpdateItemDto) {
+    const query = this.itemModel.findByIdAndUpdate(id, updateItemDto, {
       new: true,
     });
 
@@ -63,20 +71,20 @@ export class FoodService {
     return update;
   }
 
-  async delete(foodId: string) {
+  async delete(itemId: string) {
     const session = await this.connection.startSession();
     let result;
 
     await session.withTransaction(async () => {
-      result = await this.foodModel.findByIdAndDelete(foodId);
+      result = await this.itemModel.findByIdAndDelete(itemId);
 
-      const query = { food: { $in: foodId } };
+      const query = { item: { $in: itemId } };
 
       await this.shoppingCartModel
-        .updateMany(query, { $pull: { food: foodId } })
+        .updateMany(query, { $pull: { items: itemId } })
         .exec();
       await this.favouriteModel
-        .updateMany(query, { $pull: { food: foodId } })
+        .updateMany(query, { $pull: { items: itemId } })
         .exec();
     });
 
@@ -96,14 +104,14 @@ export class FoodService {
     let result;
 
     await session.withTransaction(async () => {
-      result = await this.foodModel.deleteMany({ user: userId }).exec();
+      result = await this.itemModel.deleteMany({ user: userId }).exec();
       await this.shoppingCartModel.findOneAndUpdate(
         { user: userId },
-        { food: [] },
+        { items: [] },
       );
       await this.favouriteModel.findOneAndUpdate(
         { user: userId },
-        { food: [] },
+        { items: [] },
       );
     });
 

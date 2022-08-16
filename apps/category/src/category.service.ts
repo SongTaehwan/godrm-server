@@ -2,7 +2,7 @@ import { Logger, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectConnection, InjectModel } from '@nestjs/mongoose';
 import { Connection, Query } from 'mongoose';
 
-import { Food, FoodModel } from '../../food/src/schema/food.schema';
+import { Item, ItemModel } from '../../item/src/schema/item.schema';
 import { Category, CategoryModel } from './schema/category.schema';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
@@ -14,7 +14,7 @@ export class CategoryService {
   constructor(
     @InjectConnection() private connection: Connection,
     @InjectModel(Category.name) private categoryModel: CategoryModel,
-    @InjectModel(Food.name) private foodModel: FoodModel,
+    @InjectModel(Item.name) private itemModel: ItemModel,
   ) {}
 
   private mapQuery<T, D extends Object>(query: Query<T[], T>, filterDto: D) {
@@ -70,7 +70,7 @@ export class CategoryService {
 
     await session.withTransaction(async () => {
       result = await this.categoryModel.findByIdAndDelete(id);
-      const query = this.foodModel.updateMany(
+      const query = this.itemModel.updateMany(
         { category: id },
         { category: null },
       );
@@ -94,7 +94,7 @@ export class CategoryService {
 
     await session.withTransaction(async () => {
       result = await this.categoryModel.deleteMany({ user: id });
-      await this.foodModel.updateMany({ user: id }, { category: null });
+      await this.itemModel.updateMany({ user: id }, { category: null });
     });
 
     return result;

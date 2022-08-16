@@ -4,7 +4,7 @@ import { Module } from '@nestjs/common';
 import { DatabaseConnectionModule } from '../../../libs/database-connection/src';
 import { AppValidationProvider } from '../../../libs/common/providers';
 import { JwtAuthModule } from '../../../libs/jwt-auth/src';
-import { FoodModule } from './food.module';
+import { ItemModule } from './item.module';
 
 const ENV_LOCAL = '.env.local';
 
@@ -15,7 +15,7 @@ const ENV_LOCAL = '.env.local';
       envFilePath: [ENV_LOCAL],
     }),
     DatabaseConnectionModule,
-    FoodModule,
+    ItemModule,
     JwtAuthModule,
   ],
   providers: [AppValidationProvider],

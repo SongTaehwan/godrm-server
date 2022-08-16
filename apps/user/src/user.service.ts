@@ -23,7 +23,7 @@ import {
 } from '../../category/src/schema/category.schema';
 
 import { User, UserDocument, UserModel } from './schema/user.schema';
-import { Food, FoodModel } from '../../food/src/schema/food.schema';
+import { Item, ItemModel } from '../../item/src/schema/item.schema';
 
 @Injectable()
 export class UserService {
@@ -38,8 +38,8 @@ export class UserService {
     private shoppingCartModel: ShoppingCartModel,
     @InjectModel(Favourite.name)
     private favouriteModel: FavouriteModel,
-    @InjectModel(Food.name)
-    private foodModel: FoodModel,
+    @InjectModel(Item.name)
+    private itemModel: ItemModel,
     @InjectModel(Category.name)
     private categoryModel: CategoryModel,
   ) {}
@@ -111,7 +111,7 @@ export class UserService {
       user = await this.userModel.findByIdAndDelete(id);
       await this.favouriteModel.findOneAndDelete({ user: user._id });
       await this.shoppingCartModel.findOneAndDelete({ user: user._id });
-      await this.foodModel.deleteMany({ user: user._id });
+      await this.itemModel.deleteMany({ user: user._id });
       await this.categoryModel.deleteMany({ user: user._id });
     });
 

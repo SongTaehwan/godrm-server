@@ -12,29 +12,29 @@ import { ApiResponse } from '@nestjs/swagger';
 
 import { MongoIdValidationPipe } from '../../../libs/common/pipes';
 import { User } from '../../../libs/common/decorators';
-import { CreateFoodDto } from './dto/create-food.dto';
-import { UpdateFoodDto } from './dto/update-food.dto';
-import { FoodService } from './food.service';
+import { CreateItemDto } from './dto/create-item.dto';
+import { UpdateItemDto } from './dto/update-item.dto';
+import { ItemService } from './item.service';
 
-const FOOD = 'food';
+const ITEM = 'item';
 const ID = 'id';
 const ID_PARAMETER = ':id';
 
 @Controller()
-export class FoodController {
-  constructor(private readonly foodService: FoodService) {}
+export class ItemController {
+  constructor(private readonly itemService: ItemService) {}
 
   @ApiResponse({ status: HttpStatus.OK, description: '식재료 데이터 생성' })
-  @Post(FOOD)
-  create(@User(ID) id: string, @Body() createFoodDto: CreateFoodDto) {
-    createFoodDto.user = id;
-    return this.foodService.create(createFoodDto);
+  @Post(ITEM)
+  create(@User(ID) id: string, @Body() createItemDto: CreateItemDto) {
+    createItemDto.user = id;
+    return this.itemService.create(createItemDto);
   }
 
   @ApiResponse({ status: HttpStatus.OK, description: '식재료 목록 불러오기' })
-  @Get(FOOD)
+  @Get(ITEM)
   getAll(@User(ID) id: string) {
-    return this.foodService.getByUser(id);
+    return this.itemService.getByUser(id);
   }
 
   @ApiResponse({
@@ -43,27 +43,27 @@ export class FoodController {
   })
   @Get(ID_PARAMETER)
   get(@Param(ID) id: string) {
-    return this.foodService.get(id);
+    return this.itemService.get(id);
   }
 
   @ApiResponse({ status: HttpStatus.OK, description: '식재료 정보 업데이트' })
   @Patch(ID_PARAMETER)
   update(
     @Param(ID, MongoIdValidationPipe) id: string,
-    @Body() updateFoodDto: UpdateFoodDto,
+    @Body() updateItemDto: UpdateItemDto,
   ) {
-    return this.foodService.update(id, updateFoodDto);
+    return this.itemService.update(id, updateItemDto);
   }
 
   @ApiResponse({ status: HttpStatus.OK, description: '식재료 정보 삭제' })
-  @Delete(FOOD)
+  @Delete(ITEM)
   deleteByUser(@User(ID) id: string) {
-    return this.foodService.deleteByUser(id);
+    return this.itemService.deleteByUser(id);
   }
 
   @ApiResponse({ status: HttpStatus.OK, description: '식재료 정보 삭제' })
   @Delete(ID_PARAMETER)
   delete(@Param(ID, MongoIdValidationPipe) id: string) {
-    return this.foodService.delete(id);
+    return this.itemService.delete(id);
   }
 }

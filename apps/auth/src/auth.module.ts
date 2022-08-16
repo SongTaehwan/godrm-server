@@ -7,7 +7,7 @@ import { ShoppingCartModelProvider } from '../../shopping-cart/src/providers/sho
 import { FavouriteModelProvider } from '../../favourite/src/providers/favourite-model.provider';
 import { CategoryModelProvider } from '../../category/src/providers/category-model.provider';
 import { UserModelProvider } from '../../user/src/providers/user-model.provider';
-import { ItemModelProvider } from '../../food/src/providers/Item-model.provider';
+import { ItemModelProvider } from '../../item/src/providers/Item-model.provider';
 import { AppAuthProvider } from '../../../libs/common/providers';
 import { UserService } from '../../user/src/user.service';
 import { JwtStrategy } from './strategy/jwt.strategy';

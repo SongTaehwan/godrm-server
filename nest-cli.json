@@ -1,21 +1,21 @@
 {
   "$schema": "https://json.schemastore.org/nest-cli",
   "collection": "@nestjs/schematics",
-  "sourceRoot": "apps/food/src",
+  "sourceRoot": "apps/item/src",
   "monorepo": true,
-  "root": "apps/food",
+  "root": "apps/item",
   "compilerOptions": {
     "webpack": true,
-    "tsConfigPath": "apps/food/tsconfig.app.json"
+    "tsConfigPath": "apps/item/tsconfig.app.json"
   },
   "projects": {
-    "food": {
+    "item": {
       "type": "application",
-      "root": "apps/food",
+      "root": "apps/item",
       "entryFile": "main",
-      "sourceRoot": "apps/food/src",
+      "sourceRoot": "apps/item/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/food/tsconfig.app.json"
+        "tsConfigPath": "apps/item/tsconfig.app.json"
       }
     },
     "favourite": {

@@ -3,7 +3,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
 import { DEFAULT_SCHEMA_OPTIONS } from '../../../../libs/constants/schema';
 import { User } from '../../../user/src/schema/user.schema';
-import { Food } from '../../../food/src/schema/food.schema';
+import { Item } from '../../../item/src/schema/item.schema';
 
 export type ShoppingCartDocument = ShoppingCart & Document;
 export type ShoppingCartModel = Model<ShoppingCartDocument>;
@@ -21,12 +21,12 @@ export class ShoppingCart {
   @Prop([
     {
       type: MongooseSchema.Types.ObjectId,
-      ref: Food.name,
+      ref: Item.name,
       required: true,
       default: [],
     },
   ])
-  items: (Food | string)[];
+  items: (Item | string)[];
 }
 
 export const ShoppingCartSchema = SchemaFactory.createForClass(ShoppingCart);

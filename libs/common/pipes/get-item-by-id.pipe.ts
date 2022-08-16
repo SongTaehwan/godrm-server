@@ -9,36 +9,36 @@ import { InjectModel } from '@nestjs/mongoose';
 import { isMongoId } from 'class-validator';
 
 import {
-  Food,
-  FoodModel,
-  FoodDocument,
-} from '../../../apps/food/src/schema/food.schema';
+  Item,
+  ItemModel,
+  ItemDocument,
+} from '../../../apps/item/src/schema/item.schema';
 
 @Injectable()
-export class GetFoodById
-  implements PipeTransform<string, Promise<FoodDocument>>
+export class GetItemById
+  implements PipeTransform<string, Promise<ItemDocument>>
 {
   constructor(
-    @InjectModel(Food.name)
-    private foodModel: FoodModel,
+    @InjectModel(Item.name)
+    private itemModel: ItemModel,
   ) {}
 
   async transform(
     value: string,
     metadata: ArgumentMetadata,
-  ): Promise<FoodDocument> {
+  ): Promise<ItemDocument> {
     if (!isMongoId(value)) {
       throw new BadRequestException(`Invalid ID: ${value}`);
     }
 
-    const food = await this.foodModel.findOne({
+    const item = await this.itemModel.findOne({
       id: value,
     });
 
-    if (!food) {
+    if (!item) {
       throw new NotFoundException();
     }
 
-    return food;
+    return item;
   }
 }

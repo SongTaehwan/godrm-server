@@ -1,7 +1,7 @@
 import { MongooseModule } from '@nestjs/mongoose';
 import { Module } from '@nestjs/common';
 
-import { ItemModelProvider } from '../../food/src/providers/Item-model.provider';
+import { ItemModelProvider } from '../../item/src/providers/Item-model.provider';
 import { CategoryModelProvider } from './providers/category-model.provider';
 import { CategoryController } from './category.controller';
 import { CategoryService } from './category.service';
