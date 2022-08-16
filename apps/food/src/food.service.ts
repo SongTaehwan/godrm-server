@@ -63,20 +63,20 @@ export class FoodService {
     return update;
   }
 
-  async delete(id: string) {
+  async delete(foodId: string) {
     const session = await this.connection.startSession();
     let result;
 
     await session.withTransaction(async () => {
-      result = await this.foodModel.findByIdAndDelete(id);
+      result = await this.foodModel.findByIdAndDelete(foodId);
 
-      const query = { food: { $in: id } };
+      const query = { food: { $in: foodId } };
 
       await this.shoppingCartModel
-        .updateMany(query, { $pull: { food: id } })
+        .updateMany(query, { $pull: { food: foodId } })
         .exec();
       await this.favouriteModel
-        .updateMany(query, { $pull: { food: id } })
+        .updateMany(query, { $pull: { food: foodId } })
         .exec();
     });
 

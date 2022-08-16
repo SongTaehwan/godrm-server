@@ -16,7 +16,7 @@ export class Favourite {
     required: true,
     unique: true,
   })
-  user: User;
+  user: User | string;
 
   @Prop([
     {
@@ -26,7 +26,7 @@ export class Favourite {
       default: [],
     },
   ])
-  food: (Food | string)[];
+  items: (Food | string)[];
 }
 
 export const FavouriteSchema = SchemaFactory.createForClass(Favourite);

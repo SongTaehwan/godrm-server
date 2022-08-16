@@ -1,26 +1,19 @@
 import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 
-import {
-  Favourite,
-  FavouriteSchema,
-} from '../../favourite/src/schema/favourite.schema';
-import {
-  ShoppingCart,
-  ShoppingCartSchema,
-} from '../../shopping-cart/src/schema/shopping-cart.schema';
-
+import { ShoppingCartModelProvider } from '../../shopping-cart/src/providers/shopping-cart-model.provider';
+import { FavouriteModelProvider } from '../../favourite/src/providers/favourite-model.provider';
 import { createLoggerFactory } from '../../../libs/common/middlewares';
-import { Food, FoodSchema } from './schema/food.schema';
+import { ItemModelProvider } from './providers/Item-model.provider';
 import { FoodController } from './food.controller';
 import { FoodService } from './food.service';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
-      { name: Food.name, schema: FoodSchema },
-      { name: Favourite.name, schema: FavouriteSchema },
-      { name: ShoppingCart.name, schema: ShoppingCartSchema },
+      ItemModelProvider,
+      FavouriteModelProvider,
+      ShoppingCartModelProvider,
     ]),
   ],
   controllers: [FoodController],

@@ -7,13 +7,15 @@ import {
   IsMongoId,
   IsOptional,
   IsNotEmpty,
+  IsPositive,
+  IsUppercase,
 } from 'class-validator';
 
 import { Category } from '../../../category/src/schema/category.schema';
 
 export enum StorageType {
-  FROZEN = 'frozen',
-  CHILLED = 'chilled',
+  FROZEN = 'FROZEN',
+  CHILLED = 'CHILLED',
 }
 
 export class CreateFoodDto {
@@ -27,6 +29,7 @@ export class CreateFoodDto {
 
   @IsEnum(StorageType)
   @IsNotEmpty()
+  @IsUppercase()
   storage_type: StorageType;
 
   @IsBoolean()
@@ -35,10 +38,12 @@ export class CreateFoodDto {
 
   @IsNumber()
   @IsOptional()
+  @IsPositive()
   quantity?: number;
 
   @IsNumber()
   @IsOptional()
+  @IsPositive()
   price?: number;
 
   @IsDate()

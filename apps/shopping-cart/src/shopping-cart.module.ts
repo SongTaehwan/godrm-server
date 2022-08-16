@@ -1,21 +1,19 @@
 import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 
-import {
-  ShoppingCart,
-  ShoppingCartSchema,
-} from './schema/shopping-cart.schema';
-
+import { CategoryModelProvider } from '../../category/src/providers/category-model.provider';
+import { ShoppingCartModelProvider } from './providers/shopping-cart-model.provider';
+import { ItemModelProvider } from '../../food/src/providers/Item-model.provider';
 import { createLoggerFactory } from '../../../libs/common/middlewares';
-import { Food, FoodSchema } from '../../food/src/schema/food.schema';
 import { ShoppingCartController } from './shopping-cart.controller';
 import { ShoppingCartService } from './shopping-cart.service';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
-      { name: ShoppingCart.name, schema: ShoppingCartSchema },
-      { name: Food.name, schema: FoodSchema }, // FoodModule 안에 같은 코드가 있더라도 이곳에 명시해야함
+      ShoppingCartModelProvider,
+      CategoryModelProvider,
+      ItemModelProvider,
     ]),
   ],
   controllers: [ShoppingCartController],
