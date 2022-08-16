@@ -1,20 +1,32 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  ConflictException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { FilterQuery } from 'mongoose';
 
-import { ShoppingCart, ShoppingCartModel } from './schema/shopping-cart.schema';
-import { Food, FoodModel } from '../../food/src/schema/food.schema';
+import {
+  ShoppingCart,
+  ShoppingCartModel,
+  ShoppingCartDocument,
+} from './schema/shopping-cart.schema';
+
+import { RemoveShoppingCartItemDto } from './dto/remove-shopping-cart-item.dto';
+import { AddShoppingCartItemDto } from './dto/add-shopping-cart-item.dto';
+
+const ITEMS = 'items';
+const CATEGORY = 'category';
 
 @Injectable()
 export class ShoppingCartService {
   constructor(
-    @InjectModel(Food.name)
-    private foodModel: FoodModel,
     @InjectModel(ShoppingCart.name)
     private shoppingCartModel: ShoppingCartModel,
   ) {}
 
-  async getCartByUser(id: string) {
-    const cart = await this.shoppingCartModel.find({ user: id });
+  async getCart(query: FilterQuery<ShoppingCartDocument>) {
+    const cart = await this.shoppingCartModel.findOne(query);
 
     if (!cart) {
       throw new NotFoundException();
@@ -23,18 +35,25 @@ export class ShoppingCartService {
     return cart;
   }
 
-  async getCartById(id: string) {
-    const query = this.shoppingCartModel.findById(id);
-    const cart = await query.exec();
+  async getItems(id: string) {
+    const cart = await this.shoppingCartModel
+      .findOne({ _id: id })
+      .populate({
+        path: ITEMS,
+        populate: {
+          path: CATEGORY,
+        },
+      })
+      .exec();
 
-    if (!cart) {
-      throw new NotFoundException();
-    }
-
-    return cart;
+    return cart.items;
   }
 
   async create(userId: string) {
+    if (await this.shoppingCartModel.exists({ user: userId })) {
+      throw new ConflictException();
+    }
+
     const cart = new this.shoppingCartModel({
       user: userId,
     });
@@ -42,25 +61,44 @@ export class ShoppingCartService {
     return cart.save();
   }
 
-  async addItem(id: string) {
-    const item = await this.foodModel.findById(id);
-    if (!item) {
-      throw new NotFoundException();
-    }
-    // TODO: update cart
-  }
-
-  async deleteItem(id: string) {
-    // TODO: delete item from cart
-  }
-
-  async delete(id: string) {
-    const cart = await this.shoppingCartModel.findByIdAndDelete(id);
+  async delete(query: FilterQuery<ShoppingCartDocument>) {
+    const cart = await this.shoppingCartModel.findOneAndDelete(query);
 
     if (!cart) {
-      throw new NotFoundException();
+      throw new ConflictException();
     }
 
-    return cart;
+    return {
+      id: cart._id,
+    };
+  }
+
+  async addItem({ id, itemId }: AddShoppingCartItemDto) {
+    if (await this.shoppingCartModel.exists({ id })) {
+      throw new ConflictException();
+    }
+
+    // NOTE: _id 대신 id 를 사용하면 쿼리가 적용되지 않음
+    const cart = await this.getCart({
+      $and: [{ _id: id }, { items: { $nin: [itemId] } }],
+    });
+
+    cart.items.push(itemId);
+
+    return cart.save();
+  }
+
+  async removeItem({ id, itemId }: RemoveShoppingCartItemDto) {
+    if (await this.shoppingCartModel.exists({ id })) {
+      throw new ConflictException();
+    }
+
+    const cart = await this.getCart({
+      $and: [{ _id: id }, { items: { $in: [itemId] } }],
+    });
+
+    cart.items = cart.items.filter((_id) => _id === itemId);
+
+    return cart.save();
   }
 }

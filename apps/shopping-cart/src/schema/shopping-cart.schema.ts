@@ -16,7 +16,7 @@ export class ShoppingCart {
     required: true,
     unique: true,
   })
-  user: User;
+  user: User | string;
 
   @Prop([
     {
@@ -26,7 +26,7 @@ export class ShoppingCart {
       default: [],
     },
   ])
-  food: (Food | string)[];
+  items: (Food | string)[];
 }
 
 export const ShoppingCartSchema = SchemaFactory.createForClass(ShoppingCart);

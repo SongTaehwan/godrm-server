@@ -7,6 +7,8 @@ export const AppValidationProvider = {
     new ValidationPipe({
       whitelist: true,
       transform: true,
+      enableDebugMessages: true,
+      disableErrorMessages: false,
       forbidNonWhitelisted: true,
       validateCustomDecorators: true,
     }),
