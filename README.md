@@ -1,5 +1,5 @@
-## ⭐️ Introduction
-Godrm iOS App 의 API 서버 프로젝트입니다.
+# ⭐️ Introduction
+[고드름 iOS 앱](https://github.com/SongTaehwan/godrm) 의 API 서버 프로젝트입니다.
 
 ## 🔖 Index
 - [🧐 기술 선택 의사결정 과정](https://github.com/SongTaehwan/godrm-server/wiki/%F0%9F%A7%90-%EA%B8%B0%EC%88%A0-%EC%84%A0%ED%83%9D-%EC%9D%98%EC%82%AC%EA%B2%B0%EC%A0%95-%EA%B3%BC%EC%A0%95)
